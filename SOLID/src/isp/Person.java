@@ -1,6 +1,6 @@
 package isp;
 
-public class Person {
+public class Person implements Emailable, SMSable {
 	String name, address, email, telephone;
 
 	public void setName(String n) {
