@@ -1,29 +1,25 @@
 package ocp;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class AuthService {
-	public boolean signIn(String service, String log, String pass) {
-		if (service.compareTo("facebook") == 0)
-			return singInWithFB(log, pass);
-		if (service.compareTo("google") == 0)
-			return singInWithGoogle(log, pass);
-		if (service.compareTo("twitter") == 0)
-			return singInWithTwitter(log, pass);
-		return false;
-	}
 
-	public boolean singInWithFB(String log, String pass) {
-		// use the FB api
-		return true;
-	}
+	private Map<String, IAuthService> providers;
 
-	public boolean singInWithGoogle(String log, String pass) {
-		// use the google api
-		return true;
-	}
-
-	public boolean singInWithTwitter(String log, String pass) {
-		// use the Twitter api
-		return true;
-	}
-
+    public AuthService() {
+        providers = new HashMap<>();
+        providers.put("facebook", new FacebookAuthProvider());
+        providers.put("google", new GoogleAuthProvider());
+        providers.put("twitter", new TwitterAuthProvider());
+        providers.put("apple", new AppleAuthProvider()); 
+    }
+    
+    public boolean signIn(String service, String log, String pass) {
+    	IAuthService provider = providers.get(service.toLowerCase());
+        if (provider != null) {
+            return provider.signIn(log, pass);
+        }
+        return false;
+    }
 }
